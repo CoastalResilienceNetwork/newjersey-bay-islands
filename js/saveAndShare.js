@@ -160,7 +160,7 @@ function buildFromState(){
 		app.obj.rbCbIds.forEach((v) => {
 			$('#id' + v).trigger('click');	
 		})
-		app.layers.when(function() {
+		app.supportingLayers.when(function() {
 			app.obj.supLyrIds.forEach((v) => {
 				document.querySelector(`#${v}`).click();
 			})
@@ -174,8 +174,8 @@ function buildFromState(){
 		app.obj.stateSet = "no";
 	}else{
 		//zoom to layer
-		// app.layers.when(function() {
-		// 	app.view.goTo(app.layers.fullExtent).catch(function(error){
+		// app.supportingLayers.when(function() {
+		// 	app.view.goTo(app.supportingLayers.fullExtent).catch(function(error){
 		// 		if (error.name != "AbortError"){
 		// 			console.error(error);
 		// 		}

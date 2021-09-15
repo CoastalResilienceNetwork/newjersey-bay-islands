@@ -27,8 +27,9 @@ const layerViewer = {
 	show: true,
 	// map service for layer viewer
 	url: app.url,
+	// url: "https://gis.charttools.noaa.gov/arcgis/rest/services/MCS/ENCOnline/MapServer/exts/MaritimeChartService/MapServer",
 	// location of layer view - sidebar or overmap
-	location: "sidebar",
+	location: "overmap",
 	// boolean for expand or collapse - only used in overmap 
 	expand: true,
 	// layer ids to skip in layer viewer

@@ -44,10 +44,10 @@ function createClickInfo(response){
 	let a = response.features[0].attributes;
 	
 	// turn on one and three mile buffers with definition query
-	var oneMileBuff = app.layers.findSublayerById(4);
+	var oneMileBuff = app.supportingLayers.findSublayerById(4);
 	oneMileBuff.definitionExpression = "Island_ID = " + a.Island_ID;
 	oneMileBuff.visible = true;
-	var threeMileBuff = app.layers.findSublayerById(5);
+	var threeMileBuff = app.supportingLayers.findSublayerById(5);
 	threeMileBuff.definitionExpression = "Island_ID = " + a.Island_ID;
 	threeMileBuff.visible = true;
 	

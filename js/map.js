@@ -7,6 +7,8 @@ require([
    "esri/widgets/BasemapGallery/support/PortalBasemapsSource",
    "esri/widgets/Search",
    "esri/widgets/Legend",
+   "esri/widgets/ScaleBar",
+   "esri/widgets/Measurement",
    "esri/layers/FeatureLayer", 
    "esri/layers/MapImageLayer",
    "esri/PopupTemplate",
@@ -22,6 +24,8 @@ function(
    PortalSource,
    Search,
    Legend,
+   ScaleBar,
+   Measurement,
    FeatureLayer,
    MapImageLayer,
    PopupTemplate, 
@@ -32,7 +36,7 @@ function(
    
    // create map
    app.map = new Map({
-      basemap: "topo"
+      basemap: "oceans"
    });
 
    //create map view
@@ -53,7 +57,7 @@ function(
    });
 
    //create basemap widget
-   const allowedBasemapTitles = ["Topographic", "Imagery Hybrid", "Streets"];
+   const allowedBasemapTitles = ["Oceans", "Topographic", "Imagery Hybrid", "Streets"];
    const source = new PortalSource({
       // filtering portal basemaps
       filterFunction: (basemap) => allowedBasemapTitles.indexOf(basemap.portalItem.title) > -1
@@ -92,23 +96,48 @@ function(
    // move zoom controls to top right
    app.view.ui.move([ "zoom" ], "top-right");
    
-   // create map layers - the source can be a map service or an AGO web map - sublayers are defined in variables.js
-   app.layers = new MapImageLayer({
+   //create Islands layer
+   app.islandsLayer = new MapImageLayer({
+      url: app.url,
+      sublayers: [
+         {
+            id: 3,
+            visible: true
+         }
+      ]
+   })
+   // create supporting layers
+   app.supportingLayers = new MapImageLayer({
       url: app.url 
    })
+   // nooa charts
+   app.noaaCharts = new MapImageLayer({
+      url: "https://gis.charttools.noaa.gov/arcgis/rest/services/MCS/ENCOnline/MapServer/exts/MaritimeChartService/MapServer",
+      opacity: 0.8,
+      visible: false
+   })
+
    // graphics layer for map click graphics
    app.resultsLayer = new GraphicsLayer();
    // add layers to map
-   app.map.add(app.layers)
+   app.map.add(app.noaaCharts)
+   app.map.add(app.islandsLayer)
+   app.map.add(app.supportingLayers)
    app.map.add(app.resultsLayer)
 
    // create legend
    app.legend = new Legend({
       view: app.view,
-      // layerInfos:[{
-      //    layer: app.layers,
-      //    title: "Legend"
-      // }],
+      layerInfos:[
+         {
+            layer: app.islandsLayer,
+            title: "NJ Bay Islands"
+         },
+         {
+            layer: app.supportingLayers,
+            title: "Supporting Layers"
+         },
+      ],
       content: app.legend
       // container: document.createElement("div")
    })
@@ -119,6 +148,49 @@ function(
    app.view.ui.add(app.lgExpand,{
       position: "bottom-right"
    })
+
+   // scalebar
+   const scaleBar = new ScaleBar({
+      view: app.view, 
+      unit: "dual"
+   })
+   app.view.ui.add(scaleBar, {
+      position: "bottom-left"
+   })
+
+   // measurement
+   const measurement = new Measurement({
+      view: app.view
+   })
+   app.view.ui.add(measurement, "top-left")
+
+   // measurement event listeners
+   const distanceButton = document.querySelector('#distance');
+   const areaButton = document.querySelector('#area');
+   const clearButton = document.querySelector('#clear');
+   distanceButton.addEventListener('click', (() => {
+      measurement.activeTool = "distance";
+      distanceButton.classList.add("active");
+      areaButton.classList.remove("active");
+      closeSupportingLayers();
+   }));
+   areaButton.addEventListener('click', (() => {
+      measurement.activeTool = "area";
+      areaButton.classList.add("active");
+      distanceButton.classList.remove("active");
+      closeSupportingLayers();
+   }));
+   clearButton.addEventListener('click', (() => {
+      measurement.clear();
+      areaButton.classList.remove("active");
+      distanceButton.classList.remove("active");
+   }))
+   function closeSupportingLayers(){
+      if ( document.querySelector("#overmap-toggle-button span").classList.contains('esri-icon-collapse') ){
+         console.log("made it")
+         document.querySelector("#overmap-toggle-button span").click();
+      }
+   }
 
    // change legend based on window size
    var x = window.matchMedia("(max-width: 700px)")
@@ -140,14 +212,12 @@ function(
    // call event listener for map clicks
    mapClick();
 
-   app.layers.watch("loaded", function(){
+   app.islandsLayer.watch("loaded", function(){
       setControlVals();
    }) 
 
    // layer viewer
    buildLayerViewer();
-
-
 });
 
 function clearGraphics(){

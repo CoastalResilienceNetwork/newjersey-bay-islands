@@ -3,7 +3,7 @@
    <head>
       <meta charset="utf-8" />
       <meta name="viewport" content="initial-scale=1,width=device-width,maximum-scale=1,user-scalable=no"/>
-      <title>New Jersey Bay Islands Explorer</title>
+      <title>New Jersey Bay Islands</title>
 
       <link rel="stylesheet" href="https://js.arcgis.com/4.16/esri/themes/light/main.css">
       <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous"> 
@@ -27,7 +27,7 @@
 
    <body>
       <header id="header">
-         <div class="appTitle">New Jersey Bay Islands Explorer</div>
+         <div class="appTitle">New Jersey Bay Islands Restoration Planner</div>
          <div id="searchWidget"></div>
       </header>
       <div id="flex-container">  
@@ -78,8 +78,28 @@
             </div>
          </div>
          <div id="map-div">
-            <div id="viewDiv"></div>
+            <div id="viewDiv">
+               <div id="toolbarDiv" class="esri-component esri-widget">
+                  <button
+                    id="distance"
+                    class="esri-widget--button esri-interactive esri-icon-measure-line"
+                    title="Distance Measurement Tool"
+                  ></button>
+                  <button
+                    id="area"
+                    class="esri-widget--button esri-interactive esri-icon-measure-area"
+                    title="Area Measurement Tool"
+                  ></button>
+                  <button
+                    id="clear"
+                    class="esri-widget--button esri-interactive esri-icon-trash"
+                    title="Clear Measurements"
+                  ></button>
+               </div>
+            </div>
          </div>
+         
+
       </div>
       <script>
          // toggle map

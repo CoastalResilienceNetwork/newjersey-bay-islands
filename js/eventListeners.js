@@ -95,11 +95,6 @@ function setControlVals(){
 			}
 		}
 	});	
-	app.layers.sublayers.forEach((sl) => {
-		sl.visible = false;
-	})
-	var layer = app.layers.findSublayerById(parseInt(app.obj.hucLayer));
-	layer.visible = true;
 }
 
 function eventListeners(){
@@ -162,11 +157,6 @@ function eventListeners(){
 				$(v).attr('disabled', true)		
 			})
 		}
-	})
-	// Checkboxes for supporting layers
-	$('#sup-layers-wrap .sup_cb').on('click',function(c){
-		var sublayer = app.layers.findSublayerById(parseInt(c.target.value));
-		sublayer.visible = c.target.checked;
 	})
 	// Checkbox group clicks
 	$(".checkboxes-wrap input").on('click',function(c) {
@@ -449,16 +439,16 @@ function layerDefs(){
 	}	
 	//set definition expression
 	app.definitionExpression = exp;
-	var layer = app.layers.findSublayerById(parseInt(app.obj.hucLayer));
+	var layer = app.islandsLayer.findSublayerById(parseInt(app.obj.hucLayer));
    	layer.definitionExpression = exp;
 }
 
 function closeSelectedIsland(){
 	document.querySelector("#selected-island").innerHTML = "";
   	document.querySelector("#selected-island-wrap").style.display = "none";
-  	var oneMileBuff = app.layers.findSublayerById(4);
+  	var oneMileBuff = app.supportingLayers.findSublayerById(4);
 	oneMileBuff.visible = false;
-	var threeMileBuff = app.layers.findSublayerById(5);
+	var threeMileBuff = app.supportingLayers.findSublayerById(5);
 	threeMileBuff.visible = false;
 	app.resultsLayer.removeAll();
 	app.obj.response = "none";

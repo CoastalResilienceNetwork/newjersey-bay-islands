@@ -6,6 +6,12 @@ function buildLayerViewer(){
 			esriRequest(layerViewer.url + "/layers?f=pjson", {responseType: "json"}).then(function(response){
 		      	// The requested data
 		      	let layerJson = response.data;
+		      	layerJson.layers.unshift(
+		      		{
+		      			name: "Maritime Chart (NOAA ENC® Viewer)",
+		      			id: 99
+		      		}
+	      		)
 		      	// Find the top level headers and layers
 		      	let topGroup = [];
 		   		let opacityClass = "";
@@ -61,13 +67,14 @@ function buildLayerViewer(){
 		      				document.getElementById("layer-viewer-overmap-wrap").style.display = "block";
 		      				document.getElementById("overmap-toggle-button").title = "Collapse";
 		      		}
+		      		
 		      	}
 		      	layerJson.layers.forEach((l) => {
 		      		// add layer to layer viewer if it's id is not present in the skip array
 		      		if (layerViewer.skipLayers.indexOf(l.id) == -1){
 			        	// Group Layers with no parents
 			         	if (l.type == "Group Layer" && !l.parentLayer){
-			            	topGroup.push(l)
+			            	//topGroup.push(l)
 			            	document.querySelector("#layer-viewer-wrap").insertAdjacentHTML("beforeend", `
 			               		<div>
 			                  		<div class="layer-viewer-row top-group-title group-title" id="group-title-${l.id}"><i class="fas fa-caret-right"></i><i class="fas fa-caret-down" style="display:none;"></i><span class="top-group-label">${l.name}</span></div>
@@ -138,20 +145,28 @@ function buildLayerViewer(){
 			         }
 		      	})
 				// Turn on all Group Layers so child layers show up when clicked
-				app.layers.when(function() {
+				app.supportingLayers.when(function() {
 					layerJson.layers.forEach((l) => {
-						var sublayer = app.layers.findSublayerById(l.id);
-						if (l.type == "Group Layer"){
-			 	 		    sublayer.visible = true;
-			 	 		}else {
-			 	 			sublayer.visible = false;
+						if (l.id < 90){
+							var sublayer = app.supportingLayers.findSublayerById(l.id);
+							if (l.type == "Group Layer"){
+			 	 		    	sublayer.visible = true;
+			 	 			}else {
+			 	 				sublayer.visible = false;
+			 	 			}
 			 	 		}
 					})
 				
 					// Checkboxes for supporting layer visibility
 					document.querySelectorAll("#layer-viewer-wrap .sup_cb").forEach(cb => cb.addEventListener('click', (() => {
-						let sublayer = app.layers.findSublayerById(parseInt(cb.value));
-						sublayer.visible = cb.checked;
+						if (cb.value < 90){
+							let sublayer = app.supportingLayers.findSublayerById(parseInt(cb.value));
+							sublayer.visible = cb.checked;
+						}else{	
+							if (cb.value == 99){
+								app.noaaCharts.visible = cb.checked;
+							}
+						}
 					})));
 					// Open and close Group Layers
 					document.querySelectorAll(".group-title").forEach(gr => gr.addEventListener('click', (() => {
@@ -168,19 +183,30 @@ function buildLayerViewer(){
 					// Layer viewer info click
 					document.querySelectorAll(".layer-viewer-info").forEach(info => info.addEventListener('click', (() => {
 						let id = info.id.split("-").pop();
-						esriRequest(app.url + "/" + id + "?f=pjson", {responseType: "json"}).then(function(li){
-							let des = li.data.description;
-							if (des.length == 0){
-								des = "None provided";
+						if ( id < 90){
+							esriRequest(app.url + "/" + id + "?f=pjson", {responseType: "json"}).then(function(li){
+								let des = li.data.description;
+								if (des.length == 0){
+									des = "None provided";
+								}
+								let sublayer = app.supportingLayers.findSublayerById(parseInt(id));
+								let op = sublayer.opacity;
+								document.getElementById(`oslider-${id}`).value = op;
+								document.querySelector(`#layer-desc-${id}`).innerHTML = des;
+								document.querySelector(`#opacity-title-${id}`).innerHTML = li.data.name;
+								let h = document.querySelector(`#opacity-title-${id}`).offsetHeight + 11
+								document.getElementById(`desc-wrap-${id}`).style.marginTop = h + "px";
+							})
+						}else{
+							if (id == 99){
+								let op = app.noaaCharts.opacity;
+								document.getElementById(`oslider-${id}`).value = op;
+								document.querySelector(`#layer-desc-${id}`).innerHTML = `NOAA ENC® Viewer provides a continuous depiction of the U.S. coastal waters as displayed on electronic chart systems. Included ENCs are include all of the latest Notice to Mariners corrections and are updated weekly on Friday afternoons. Please be aware there may be service downtime during this update period. <strong>This layer will not display in the legend</strong>. For more information visit the <a href="https://www.nauticalcharts.noaa.gov/ENCOnline" target="_blank">NOAA ENC Viewer website</a>. `;
+								document.querySelector(`#opacity-title-${id}`).innerHTML = "Maritime Chart (NOAA ENC® Viewer)";
+								let h = document.querySelector(`#opacity-title-${id}`).offsetHeight + 51
+								document.getElementById(`desc-wrap-${id}`).style.marginTop = h + "px";
 							}
-							let sublayer = app.layers.findSublayerById(parseInt(id));
-							let op = sublayer.opacity;
-							document.getElementById(`oslider-${id}`).value = op;
-							document.querySelector(`#layer-desc-${id}`).innerHTML = des;
-							document.querySelector(`#opacity-title-${id}`).innerHTML = li.data.name;
-							let h = document.querySelector(`#opacity-title-${id}`).offsetHeight + 11
-							document.getElementById(`desc-wrap-${id}`).style.marginTop = h + "px";
-						})
+						}
 						info.parentNode.querySelector(".info-dropdown").style.display = "block";
 					})));
 					// hide info popup when mouse leaves
@@ -194,8 +220,12 @@ function buildLayerViewer(){
 					document.querySelectorAll(".opacity-slider").forEach(slider => slider.addEventListener('mouseup', (() => {
 						let op = slider.value
 						let id = slider.id.split("-").pop();
-						let sublayer = app.layers.findSublayerById(parseInt(id));
-						sublayer.opacity = op;
+						if (id == 99){
+							app.noaaCharts.opacity = op;
+						}else{
+							let sublayer = app.supportingLayers.findSublayerById(parseInt(id));
+							sublayer.opacity = op;
+						}
 					})));
 
 					// trigger control clicks from app.obj
