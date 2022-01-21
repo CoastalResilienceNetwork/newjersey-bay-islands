@@ -69,7 +69,8 @@ function(
    });
    var bgExpand = new Expand({
       view: app.view,
-      content: basemapGallery
+      content: basemapGallery,
+      expandTooltip: 'Basemaps'
    });
    app.view.ui.add(bgExpand, {
       position: "top-right"
@@ -87,7 +88,8 @@ function(
    });
    var srExpand = new Expand({
       view: app.view,
-      content: searchWidget
+      content: searchWidget,
+      expandTooltip: 'Search location'
    })
    app.view.ui.add(srExpand, {
       position: "top-right"
