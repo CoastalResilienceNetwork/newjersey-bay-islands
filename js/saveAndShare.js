@@ -136,8 +136,11 @@ function updateObject(){
 	}))
 	// center and zoom level
 	app.obj.extent = app.view.extent;
-
-	// tigger build from state
+	// get current basemap, lookup for basemap id
+	var basemaps =[{title: "Oceans",id:"oceans"},{title: "Topographic",id: "topo-vector"},{title:"Imagery Hybrid", id:"hybrid"},{title:"Streets", id:"streets-vector"}]
+	var currentBasemap = basemaps.find( ({ title }) => title === app.map.basemap.title );
+	app.obj.basemap = currentBasemap.id;
+	// trigger build from state
 	app.obj.stateSet = "yes";
 }
 
@@ -165,10 +168,11 @@ function buildFromState(){
 				document.querySelector(`#${v}`).click();
 			})
 		});
-		//extent
+		//extent and basemap
 		require(["esri/geometry/Extent", "esri/geometry/SpatialReference"], function(Extent,SpatialReference) { 
 			app.view.when(function(){
 				app.view.extent = new Extent(app.obj.extent)
+				app.map.basemap = app.obj.basemap
 			})
 		});
 		app.obj.stateSet = "no";

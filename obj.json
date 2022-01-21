@@ -12,5 +12,6 @@
 	"supLyrIds": [],
 	"extent": {},
 	"response": "none",
-	"stateSet": "no"
+	"stateSet": "no",
+	"basemap": "oceans"
 }
