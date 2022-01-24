@@ -137,7 +137,14 @@ function updateObject(){
 	// center and zoom level
 	app.obj.extent = app.view.extent;
 	// get current basemap, lookup for basemap id
-	var basemaps =[{title: "Oceans",id:"oceans"},{title: "Topographic",id: "topo-vector"},{title:"Imagery Hybrid", id:"hybrid"},{title:"Streets", id:"streets-vector"}]
+	var basemaps =[{title: "Oceans",id:"oceans"},
+	{title: "oceans", id:"oceans"},
+	{title: "Topographic", id: "topo-vector"},
+	{title: "topo-vector", id: "topo-vector"},
+	{title: "Imagery Hybrid", id: "hybrid"},
+	{title: "hybrid", id: "hybrid"},
+	{title: "Streets", id: "streets-vector"},
+   {title: "streets", id: "streets-vector"}]
 	var currentBasemap = basemaps.find( ({ title }) => title === app.map.basemap.title );
 	app.obj.basemap = currentBasemap.id;
 	// trigger build from state
