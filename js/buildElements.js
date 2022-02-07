@@ -23,6 +23,7 @@ function buildElements(){
 							<div class="flex1a">
 								<span class="umr-slider-label label-off"><span class="rnum label-off">x</span> to <span class="rnum label-off">y</span> ${v1.unit}</span>
 								<div class="slider-container range-slider" style="width:170px;">
+									<canvas id="hist-id-${v1.field}" width="170" height="30" style="margin-bottom:2px;"></canvas>
 									<div id="id-${v1.field}" class="slider"></div>
 								</div>
 							</div>
@@ -31,6 +32,7 @@ function buildElements(){
 						</div>	
 					</div>
 				`);
+				getHistogram(v1.field)
 			}
 			if (v1.type == "radio"){
 				document.querySelector(`#oc-wrap${num}`).insertAdjacentHTML("beforeend", `
