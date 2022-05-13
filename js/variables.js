@@ -62,7 +62,7 @@ function buildVariables(){
 				con2:{
 					type:"slider",
 					field:"brng_cap",
-					label:"Tidal marsh Substrate Bearing Capacity",
+					label:"Soil Penetration Depth",
 					unit:""
 				},
 				con3:{
@@ -209,7 +209,7 @@ function buildVariables(){
 		}, 
 		brng_cap:{
 			values:[],vis:true,min:0,max:10,
-			info:"<b>Tidal marsh Substrate Bearing Capacity</b><br>Bearing Capacity is  one of the five metrics used in the Habitat Score section of the  Mid-TRAM assessment. This metric is a measure of soil resistance using a slide hammer. A high  bear bearing capacity indicates that the substrate is firm,  suggesting good conditions for supporting loads (wetland plants to grow). Zero Value indicates the island is to small in size or has yet to be assessed. <a href='https://www.barnegatbaypartnership.org/' target='_blank'>More Info</a>"
+			info:"<b>Tidal marsh Soil Penetration Depth</b><br>Soil Penetration Depthis one of the five parameters used in the Habitat Score section of the Mid-TRAM assessment. It is a measure of the softness (or sponginess) of the surface of the marsh soil: higher numbers are softer (deeper penetration) and lower numbers are firmer (shallower penetration). Zero indicates the island is either too small to be assessed using the Mid-TRAM methodologyor that it has yet to be assessed. <a href='https://www.barnegatbaypartnership.org/' target='_blank'>More Info</a>"
 		}, 
 		Ditch_feet:{
 			values:[],vis:true,min:0,max:5000,gtmax:true,
