@@ -31,7 +31,7 @@ function createURL(){
 	};
 	
 	var linkRequest = {
-		destination: "https://dev-maps.coastalresilience.org/nj-bay-islands/?search=" + uri
+		destination: "https://maps.coastalresilience.org/nj-bay-islands/?search=" + uri
 	};
 	shortUrl = "";
 	$.ajax({
