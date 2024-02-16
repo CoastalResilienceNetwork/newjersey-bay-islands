@@ -1,132 +1,366 @@
 <!DOCTYPE html>
 <html>
-   <head>
-      <meta charset="utf-8" />
-      <meta name="viewport" content="initial-scale=1,width=device-width,maximum-scale=1,user-scalable=no"/>
-      <title>New Jersey Bay Islands</title>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="initial-scale=1,width=device-width,maximum-scale=1,user-scalable=no"
+    />
+    <title>New Jersey Bay Islands</title>
 
-      <link rel="stylesheet" href="https://js.arcgis.com/4.16/esri/themes/light/main.css">
-      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous"> 
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-      <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.0/themes/smoothness/jquery-ui.css">
-      <link rel="stylesheet" href="css/styleguide.css">
-      <link rel="stylesheet" href="css/style.css">
-      <link rel="stylesheet" href="css/appComponents.css">
-      <link rel="stylesheet" href="css/saveAndShare.css">
-      <link rel="stylesheet" href="css/layerViewer.css">
-      <link rel="stylesheet" href="css/responsive.css">
-      <script type="text/javascript">
-         let app = {};
-      </script>
-      <script type="text/javascript" src="https://kit.fontawesome.com/483252d290.js" crossorigin="anonymous"></script>
-      <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-      <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js" integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E=" crossorigin="anonymous"></script>   
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script> 
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.min.js"></script>
-      <script src="https://js.arcgis.com/4.16/"></script>
-   </head>
+    <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/4.16/esri/themes/light/main.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.4.1/css/all.css"
+      integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://code.jquery.com/ui/1.12.0/themes/smoothness/jquery-ui.css"
+    />
+    <link rel="stylesheet" href="css/styleguide.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/appComponents.css" />
+    <link rel="stylesheet" href="css/saveAndShare.css" />
+    <link rel="stylesheet" href="css/layerViewer.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
+    <script type="text/javascript">
+      let app = {};
+    </script>
+    <script
+      type="text/javascript"
+      src="https://kit.fontawesome.com/483252d290.js"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.min.js"
+      integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"
+      integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E="
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.min.js"></script>
+    <script src="https://js.arcgis.com/4.16/"></script>
+  </head>
 
-   <body>
-      <header id="header">
-         <div class="appTitle">New Jersey Bay Islands Restoration Planner (Beta)</div>
-         <div id="searchWidget"></div>
-      </header>
-      <div id="flex-container">  
-         <div id="side-nav">
-            <div id="contentPane">
-               <div id="innerContent" class="flex1 content-wrap">
-                  <section class="umr-first-section">
-                     <div class="app-intro-text">Welcome to the beta version of the New Jersey Bay Islands Restoration Planner–a decision-support tool for managing NJ’s bay islands from Metedeconk River south to Beach Haven / Little Egg Inlet.<br><br>
-                     This tool allows the user to select (filter) islands based on restoration need (ISLAND CONDITION) and to plan an ecological restoration project (PROJECT PLANNING). <span class="intro-click" style="vertical-align: top;">Show more</span><span style="display:none;">
-                     <ol>
-                        <li>To start, all islands are selected (all data/attribute ranges are “on”).</li>
-                        <li>LEFT MENU: Use the menu on the left to narrow the islands selected by turning on or off the data (island attributes) of your choosing.</li>
-                        <li>CENTER TOP MENU: Click to view supporting layers - waterways, subaqueous soils, marsh vegetation classification, and bathymetry. The opacity of each can be changed there too.</li>
-                        <li>RIGHT TOP MENU: Select the underlying imagery (base layer).</li>
-                        <li>Click on any island to reveal its list of data (attributes) and a 1-mile and 3-mile buffer/circumference from its shoreline.</li>
-                     </ol> 
-                     This tool was created by Barnegat Bay Partnership, Stockton University Coastal Research Center, The Nature Conservancy,  and USFWS-E.B. Forsythe National Wildlife Refuge, which are members of the <a href="https://www.barnegatbaypartnership.org/protect/restoration/islands/" target="_blank">NJ Bay Islands Initiative</a>.
-                     <p>Download Island Data:&nbsp;<a href="https://maps.coastalresilience.org/nj-bay-islands/LBI_BB_Islands_20211118_wgs84_final.zip">Shapefile</a>
-                        &nbsp;&nbsp;<a href="https://maps.coastalresilience.org/nj-bay-islands/LBI_BB_Islands_20211118.xlsx">Excel</a></p>
-                     <span style="display:none;" class="intro-click">Show Less</span></span></div>
-                  </section>
-                  <section id="selected-island-wrap">
-                     <i id="close-selected-island" class="fal fa-times-circle" title="Close"></i>
-                     <div id="selected-island"></div>
-                  </section>
-                  <section id="mng-act-wrap" class="mng-act-wrap">
-                     <div style="position:relative;">
-                        <h3>Filter Islands</h3>
-                        <i id="resetFilters" class="far fa-undo" title="Reset Filters"></i>
-                        <!--i id="customExpression" class="far fa-edit" title="Create Custom Expression">Create Custom Filter</i-->
-                        <!-- <div> 
+  <body>
+    <header id="header">
+      <div class="appTitle">New Jersey Bay Islands Restoration Planner</div>
+      <div id="searchWidget"></div>
+    </header>
+    <div id="flex-container">
+      <div id="side-nav">
+        <div id="contentPane">
+          <div id="innerContent" class="flex1 content-wrap">
+            <section class="umr-first-section">
+              <div class="app-intro-text">
+                Welcome to the New Jersey Bay Islands Restoration Planner – a
+                decision-support tool for managing NJ’s bay islands from
+                Metedeconk River south to Beach Haven / Little Egg Inlet.<br /><br />
+                This tool allows you, the user, to select (filter) islands based
+                on restoration need (ISLAND CONDITION) and helps you plan an
+                ecological restoration project (PROJECT PLANNING).
+                <span class="intro-click" style="vertical-align: top"
+                  >Show more</span
+                ><span style="display: none">
+                  <ol>
+                    <li>
+                      To start, all islands are selected (all data/attribute
+                      ranges are “on”).
+                    </li>
+                    <li>
+                      LEFT MENU: Use the menu on the left to narrow the islands
+                      selected by turning on or off the data (island attributes)
+                      of your choosing.
+                    </li>
+                    <li>
+                      CENTER TOP MENU: Click to view supporting layers -
+                      waterways, subaqueous soils, marsh vegetation
+                      classification, and bathymetry. The opacity of each can be
+                      changed there too.
+                    </li>
+                    <li>
+                      RIGHT TOP MENU: Select the underlying imagery (base
+                      layer).
+                    </li>
+                    <li>
+                      Click on any island to reveal a list of its data
+                      (attributes) and a 1-mile and 3-mile buffer from its
+                      shoreline. (Click outside the 3-mile buffer area to remove
+                      the stippling.)
+                    </li>
+                  </ol>
+                  This tool was created by Barnegat Bay Partnership, Stockton
+                  University Coastal Research Center, The Nature Conservancy,
+                  and USFWS-E.B. Forsythe National Wildlife Refuge, which are
+                  members of the
+                  <a
+                    href="https://www.barnegatbaypartnership.org/protect/restoration/islands/"
+                    target="_blank"
+                    >NJ Bay Islands Initiative</a
+                  >.
+                  <p>
+                    <b>Download Island Data:</b>&nbsp;<a
+                      href="https://maps.coastalresilience.org/nj-bay-islands/LBI_BB_Islands_20211118_wgs84_final.zip"
+                      >Shapefile</a
+                    >
+                    &nbsp;&nbsp;<a
+                      href="https://maps.coastalresilience.org/nj-bay-islands/LBI_BB_Islands_20211118.xlsx"
+                      >Excel</a
+                    >
+                  </p>
+                  <p>Other web-based tools and maps you may find useful:</p>
+                  <ul>
+                    <li>
+                      <a href="https://njrestors.rutgers.edu/" target="_blank"
+                        >NJ Restoration Tool Organization Suite (ResTOrS)</a
+                      >
+                    </li>
+                    <li>
+                      <a
+                        href="https://nj.gov/dep/gis/geowebsplash.htm"
+                        target="_blank"
+                        >NJ Geo-Web</a
+                      >
+                    </li>
+                    <li>
+                      <a
+                        href="https://boydsmaps.com/#9.00/39.891474/-74.247213/hereHybrid/0.00/0.00"
+                        target="_blank"
+                        >Boyds Maps</a
+                      >
+                    </li>
+                    <li>
+                      <a href="https://www.historicaerials.com/" target="_blank"
+                        >Historical Aerials</a
+                      >
+                    </li>
+                    <li>
+                      <a href="https://www.njfloodmapper.org/" target="_blank"
+                        >NJ Adapt | NJFloodMapper</a
+                      >
+                    </li>
+                    <li>
+                      <a
+                        href="https://dep.nj.gov/aquaculture/a-gis-based-tool-for-spatial-planning-of-shellfish-aquaculture-in-new-jersey/"
+                        target="_blank"
+                        >NJ Aquaculture Siting Information Tool</a
+                      >
+                    </li>
+                    <li>
+                      <a
+                        href="https://www.njmap2.com/blueprint/"
+                        target="_blank"
+                        >NJ Conservation Blueprint</a
+                      >
+                    </li>
+                    <li>
+                      <a
+                        href="https://nauticalcharts.noaa.gov/enconline/enconline.html"
+                        target="_blank"
+                        >NOAA Nautical Charts</a
+                      >
+                    </li>
+                    <li>
+                      <a
+                        href="https://ngmdb.usgs.gov/topoview/viewer/#4/39.98/-100.06"
+                        target="_blank"
+                        >USGS topoView</a
+                      >
+                    </li>
+                    <li>
+                      <a
+                        href="https://www.state.nj.us/dep/njgs/enviroed/vermeulemaps.htm#download"
+                        target="_blank"
+                        >Historical Topographic Manuscript (Vermeule) Maps</a
+                      >
+                    </li>
+                    <li>
+                      <a
+                        href="http://alabamamaps.ua.edu/historicalmaps/Coastal%20Survey%20Maps/new%20jersey.htm"
+                        target="_blank"
+                        >1800s Coastal Topographic Sheets of NJ</a
+                      >
+                    </li>
+
+                    <li>
+                      <a href="http://hint.fm/wind/" target="_blank">
+                        Wind Map</a
+                      >
+                    </li>
+                    <li>
+                      <a
+                        href="https://www.fisheries.noaa.gov/resource/map/essential-fish-habitat-mapper"
+                        target="_blank"
+                      >
+                        NOAA Essential Fish Habitat Mapper</a
+                      >
+                    </li>
+                    <li>
+                      <a
+                        href="https://gim2.aptim.com/ASBPANationwideRenourishment/"
+                        target="_blank"
+                        >National Beach Nourishment Database</a
+                      >
+                    </li>
+                    <li>
+                      <a href="https://native-land.ca/" target="_blank"
+                        >Native Land</a
+                      >
+                    </li>
+                    <li>
+                      <a
+                        href="https://njdep.maps.arcgis.com/apps/webappviewer/index.html?id=34e507ead25b4aa5a5051dbb85e55055"
+                        target="_blank"
+                        >NJ Overburdened Communities</a
+                      >
+                    </li>
+                    <li>
+                      <a
+                        href="https://screeningtool.geoplatform.gov/en/#11.34/39.9415/-74.1588"
+                        target="_blank"
+                        >US Climate and Economic Justice Screening Tool</a
+                      >
+                    </li>
+                    <li>
+                      <a
+                        href="https://geoapps.nj.gov/congressionaldistricts/"
+                        target="_blank"
+                        >NJ Congressional Districts</a
+                      >
+                    </li>
+                  </ul>
+
+                  <span style="display: none" class="intro-click"
+                    >Show Less</span
+                  ></span
+                >
+              </div>
+            </section>
+            <section id="selected-island-wrap">
+              <i
+                id="close-selected-island"
+                class="fal fa-times-circle"
+                title="Close"
+              ></i>
+              <div id="selected-island"></div>
+            </section>
+            <section id="mng-act-wrap" class="mng-act-wrap">
+              <div style="position: relative">
+                <h3>Filter Islands</h3>
+                <i
+                  id="resetFilters"
+                  class="far fa-undo"
+                  title="Reset Filters"
+                ></i>
+                <!--i id="customExpression" class="far fa-edit" title="Create Custom Expression">Create Custom Filter</i-->
+                <!-- <div> 
                            <button id="downloadData" class="button button-default dlssre" disabled style="height:31px; padding:6px 8px;">Download Selected Data</button>
                            <button id="resetFilters" class="button button-default dlssre" disabled style="height:31px; padding:6px 8px;">Reset Filters</button>
                         </div> -->
-                           
-                     </div>
-                  </section>
-               </div>
-            </div>
-         </div>
-         <div id="map-toggle">
-            <div class="landscape-toggle"> 
-               <span><i style="margin-bottom: 10px;" class="fas fa-chevron-left"></i>HIDE</span>
-               <span class="hide"><i style="margin-bottom: 10px;" class="fas fa-chevron-right"></i>SHOW</span>
-               <span>CONTROLS<i style="margin-top: 10px;" class="fas fa-chevron-left"></i></span>
-               <span class="hide">CONTROLS<i style="margin-top: 10px;" class="fas fa-chevron-right"></i></span>
-            </div>
-            <div class="portrait-toggle">
-               <span><i style="margin-right: 10px;" class="fas fa-chevron-down"></i>HIDE</span>
-               <span class="hide"><i style="margin-right: 10px;" class="fas fa-chevron-up"></i>SHOW</span>
-               <span>CONTROLS<i style="margin-left: 10px;" class="fas fa-chevron-down"></i></span>
-               <span class="hide">CONTROLS<i style="margin-left: 10px;" class="fas fa-chevron-up"></i></span>
-            </div>
-         </div>
-         <div id="map-div">
-            <div id="viewDiv">
-               <div id="toolbarDiv" class="esri-component esri-widget">
-                  <button
-                    id="distance"
-                    class="esri-widget--button esri-interactive esri-icon-measure-line"
-                    title="Distance Measurement Tool"
-                  ></button>
-                  <button
-                    id="area"
-                    class="esri-widget--button esri-interactive esri-icon-measure-area"
-                    title="Area Measurement Tool"
-                  ></button>
-                  <button
-                    id="clear"
-                    class="esri-widget--button esri-interactive esri-icon-trash"
-                    title="Clear Measurements"
-                  ></button>
-               </div>
-            </div>
-         </div>
-         
-
+              </div>
+            </section>
+          </div>
+        </div>
       </div>
-      <script>
-         // toggle map
-         document.querySelector(`#map-toggle`).addEventListener('click', (() => {            
-            document.querySelectorAll(`#map-toggle span`).forEach(span => {
-               span.classList.toggle("hide")
-            })
-            if (app.mobile){
-               document.querySelector(`#side-nav`).classList.toggle("hide-side-nav-height");
-            } else{
-               document.querySelector(`#side-nav`).classList.toggle("hide-side-nav-width");
-            }
-         }))
-      </script>
-      <script src="js/buildElements.js"></script>
-      <script src="js/eventListeners.js"></script>
-      <script src="js/variables.js"></script>
-      <script src="js/saveAndShare.js"></script>
-      <script src="js/layerViewer.js"></script>
-      <script src="js/map.js"></script>
-      <script src="js/mapClick.js"></script>
-      <script src="js/getHistogram.js"></script>
-   </body>
+      <div id="map-toggle">
+        <div class="landscape-toggle">
+          <span
+            ><i style="margin-bottom: 10px" class="fas fa-chevron-left"></i
+            >HIDE</span
+          >
+          <span class="hide"
+            ><i style="margin-bottom: 10px" class="fas fa-chevron-right"></i
+            >SHOW</span
+          >
+          <span
+            >CONTROLS<i style="margin-top: 10px" class="fas fa-chevron-left"></i
+          ></span>
+          <span class="hide"
+            >CONTROLS<i
+              style="margin-top: 10px"
+              class="fas fa-chevron-right"
+            ></i
+          ></span>
+        </div>
+        <div class="portrait-toggle">
+          <span
+            ><i style="margin-right: 10px" class="fas fa-chevron-down"></i
+            >HIDE</span
+          >
+          <span class="hide"
+            ><i style="margin-right: 10px" class="fas fa-chevron-up"></i
+            >SHOW</span
+          >
+          <span
+            >CONTROLS<i
+              style="margin-left: 10px"
+              class="fas fa-chevron-down"
+            ></i
+          ></span>
+          <span class="hide"
+            >CONTROLS<i style="margin-left: 10px" class="fas fa-chevron-up"></i
+          ></span>
+        </div>
+      </div>
+      <div id="map-div">
+        <div id="viewDiv">
+          <div id="toolbarDiv" class="esri-component esri-widget">
+            <button
+              id="distance"
+              class="esri-widget--button esri-interactive esri-icon-measure-line"
+              title="Distance Measurement Tool"
+            ></button>
+            <button
+              id="area"
+              class="esri-widget--button esri-interactive esri-icon-measure-area"
+              title="Area Measurement Tool"
+            ></button>
+            <button
+              id="clear"
+              class="esri-widget--button esri-interactive esri-icon-trash"
+              title="Clear Measurements"
+            ></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      // toggle map
+      document.querySelector(`#map-toggle`).addEventListener('click', () => {
+        document.querySelectorAll(`#map-toggle span`).forEach((span) => {
+          span.classList.toggle('hide');
+        });
+        if (app.mobile) {
+          document
+            .querySelector(`#side-nav`)
+            .classList.toggle('hide-side-nav-height');
+        } else {
+          document
+            .querySelector(`#side-nav`)
+            .classList.toggle('hide-side-nav-width');
+        }
+      });
+    </script>
+    <script src="js/buildElements.js"></script>
+    <script src="js/eventListeners.js"></script>
+    <script src="js/variables.js"></script>
+    <script src="js/saveAndShare.js"></script>
+    <script src="js/layerViewer.js"></script>
+    <script src="js/map.js"></script>
+    <script src="js/mapClick.js"></script>
+    <script src="js/getHistogram.js"></script>
+  </body>
 </html>

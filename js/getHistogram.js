@@ -1,5 +1,5 @@
 function getHistogram(RfieldName) {
-  //getHistogramQuery(RfieldName);
+  getHistogramQuery(RfieldName);
   let data = [
     {
       fieldName: 'prcnt_mhw',
@@ -66,6 +66,22 @@ function getHistogram(RfieldName) {
       ],
     },
     {
+      fieldName: 'Erosn_prct',
+      min: 0,
+      max: 100,
+      steps: 1,
+      data: [
+        7.31, 6.24, 13.69, 16.7, 11.32, 6.8, 70.82, 4.69, 2.11, 75.43, 10.98,
+        35.41, 17.34, 9.82, 9.59, 7.2, 2.45, 12.26, 0, 0, 9.18, 4.61, 5.08, 7.2,
+        29.49, 2.58, 4.73, 4.19, 5.97, 6.75, 34.13, 45.98, 12.21, 12.24, 4.29,
+        6.21, 9.28, 8.42, 49.46, 1.42, 7.1, 2.67, 28.49, 24.74, 49.8, 24.46,
+        3.22, 2.58, 1.04, 2.99, 4.38, 12.11, 72.82, 3.11, 7.28, 8.09, 19.28,
+        84.88, 35.42, 10.39, 14.92, 5.73, 35.07, 3.46, 21.39, 0, 6.22, 22.04,
+        16.49, 29.73, 36.78, 10.88, 3.45, 7.93, 4.2, 3.44, 6.14, 0, 0.17, 0,
+        7.21, 1.31, 0.85, 5.81, 0, 6.19, 3.41, 0, 0, 3.22, 0, 23.02,
+      ],
+    },
+    {
       fieldName: 'brng_cap',
       min: 0,
       max: 10,
@@ -102,6 +118,20 @@ function getHistogram(RfieldName) {
         6242, 1737, 8739, 0, 1399, 0, 0, 0, 0, 0, 0, 0, 0, 0, 547, 0, 0, 375, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 266, 0, 0, 0, 0, 0, 0, 287, 0, 1249, 0, 0, 0,
         2335, 0, 0,
+      ],
+    },
+    {
+      fieldName: 'Ditch_prct',
+      min: 0,
+      max: 5,
+      steps: 1,
+      data: [
+        0.79, 0.98, 0.35, 0, 0, 0, 0, 0, 0.69, 0, 0, 0, 0, 0.87, 0.6, 0.56,
+        0.07, 0.03, 0, 0, 0, 0.05, 0, 0, 0, 0.56, 0, 0.17, 0.64, 0.49, 0, 0,
+        1.27, 0.71, 2.22, 2.2, 0, 0, 0, 0, 0.07, 0, 0, 0, 0, 0, 0.84, 1.67,
+        0.24, 1.22, 1.1, 4.03, 0, 0.23, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.18, 0, 0,
+        0.31, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.19, 0, 0, 0, 0, 0, 0, 0.02, 0, 0.31,
+        0, 0, 0, 0.09, 0, 0,
       ],
     },
     {
@@ -468,7 +498,6 @@ function getHistogram(RfieldName) {
   ];
 
   let fieldInfo = data.find(({ fieldName }) => fieldName == RfieldName);
-  console.log(fieldInfo);
   if (fieldInfo) {
     getHistogramChart(fieldInfo);
   }
@@ -477,9 +506,7 @@ function getHistogram(RfieldName) {
 //uncomment and run this function from getHistogram if you need to get updated query data for the histogram.  the results print to the screen and can
 //be coppied into to the data object above. The data is currently hard coded.
 
-/*function getHistogramQuery(fieldName) {
-  console.log(fieldName);
-
+function getHistogramQuery(fieldName) {
   require(['esri/tasks/support/Query', 'esri/layers/FeatureLayer'], function (
     Query,
     FeatureLayer
@@ -500,7 +527,7 @@ function getHistogram(RfieldName) {
       console.log(vals);
     });
   });
-}*/
+}
 
 function getHistogramChart(fieldInfo) {
   let fieldName = fieldInfo.fieldName;
@@ -509,7 +536,6 @@ function getHistogramChart(fieldInfo) {
   let min = fieldInfo.min;
   let max = fieldInfo.max;
   let data = histogramBins(vals, steps, min, max);
-  console.log(data);
   const ctx = document.getElementById('hist-id-' + fieldName).getContext('2d');
   const chart = new Chart(ctx, {
     type: 'line',
@@ -518,7 +544,7 @@ function getHistogramChart(fieldInfo) {
       datasets: [
         {
           data: data,
-          backgroundColor: ['rgba(202,221,238, .2)'],
+          backgroundColor: ['rgba(202,221,238, 1)'],
           borderColor: ['rgba(202,221,238, 1)'],
         },
       ],
@@ -567,10 +593,8 @@ function histogramBins(data, size, min, max) {
   }*/
 
   const bins = Math.ceil((max - min + 1) / size);
-  console.log(bins);
 
   const histogram = new Array(bins).fill(0);
-  console.log(histogram);
 
   for (let item of data) {
     if (item > max) {
@@ -578,8 +602,6 @@ function histogramBins(data, size, min, max) {
     }
     histogram[Math.floor((item - min) / size)]++;
   }
-
-  console.log(histogram);
 
   return histogram;
 }
