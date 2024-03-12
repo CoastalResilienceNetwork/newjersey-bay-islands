@@ -16,7 +16,8 @@ require([
   'esri/tasks/support/Query',
   'esri/layers/GraphicsLayer',
   'esri/core/watchUtils',
-  'esri/core/Basemap',
+  'esri/layers/WMSLayer',
+  'esri/layers/ImageryLayer',
 ], function (
   Map,
   MapView,
@@ -34,7 +35,8 @@ require([
   Query,
   GraphicsLayer,
   watchUtils,
-  Basemap
+  WMSLayer,
+  ImageryLayer
 ) {
   // create map
   app.map = new Map({
@@ -131,10 +133,18 @@ require([
     visible: false,
   });
 
+  // nooa charts
+  app.erosion = new ImageryLayer({
+    url: 'https://tiledimageservices1.arcgis.com/ze0XBzU1FXj94DJq/arcgis/rest/services/Likelihood_of_Erosion_by_2050/ImageServer',
+  });
+
+  //
+
   // graphics layer for map click graphics
   app.resultsLayer = new GraphicsLayer();
   // add layers to map
   app.map.add(app.noaaCharts);
+  app.map.add(app.erosion);
 
   app.map.add(app.supportingLayers);
   app.map.add(app.islandsLayer);
@@ -196,6 +206,7 @@ require([
     closeSupportingLayers();
   });
   clearButton.addEventListener('click', () => {
+    console.log(app.view.zoom);
     measurement.clear();
     areaButton.classList.remove('active');
     distanceButton.classList.remove('active');
