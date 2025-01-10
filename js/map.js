@@ -17,7 +17,7 @@ require([
   'esri/layers/GraphicsLayer',
   'esri/core/watchUtils',
   'esri/layers/WMSLayer',
-  'esri/layers/ImageryLayer',
+  'esri/layers/ImageryTileLayer',
 ], function (
   Map,
   MapView,
@@ -36,7 +36,7 @@ require([
   GraphicsLayer,
   watchUtils,
   WMSLayer,
-  ImageryLayer
+  ImageryTileLayer
 ) {
   // create map
   app.map = new Map({
@@ -134,8 +134,16 @@ require([
   });
 
   // nooa charts
-  app.erosion = new ImageryLayer({
+  app.erosion = new ImageryTileLayer({
     url: 'https://tiledimageservices1.arcgis.com/ze0XBzU1FXj94DJq/arcgis/rest/services/Likelihood_of_Erosion_by_2050/ImageServer',
+    opacity: 0.8,
+    visible: false,
+  });
+
+  app.public = new FeatureLayer({
+    url: 'https://mapsdep.nj.gov/arcgis/rest/services/Features/Environmental_admin/MapServer/7',
+    opacity: 0.8,
+    visible: false,
   });
 
   //
@@ -145,6 +153,7 @@ require([
   // add layers to map
   app.map.add(app.noaaCharts);
   app.map.add(app.erosion);
+  app.map.add(app.public);
 
   app.map.add(app.supportingLayers);
   app.map.add(app.islandsLayer);
